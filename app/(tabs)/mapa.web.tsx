@@ -122,7 +122,7 @@ export default function MapaWebScreen() {
                     {photo.source === 'camera' ? 'Cámara' : 'Galería'}
                   </Text>
                   {photo.albumId && albumMap.has(photo.albumId) && (
-                    <Text style={styles.photoAlbum}>📁 {albumMap.get(photo.albumId)}</Text>
+                    <Text style={styles.photoAlbum}>{albumMap.get(photo.albumId)}</Text>
                   )}
                   {photo.note && (
                     <Text style={styles.photoNote} numberOfLines={1}>

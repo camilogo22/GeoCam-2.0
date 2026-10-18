@@ -6,7 +6,7 @@
 
 ---
 
-## 📑 Tabla de Contenidos
+## Tabla de Contenidos
 1. [Visión General del Proyecto](#1-visión-general-del-proyecto)
 2. [Respuestas a las Preguntas de Repaso (Teoría)](#2-respuestas-a-las-preguntas-de-repaso-teoría)
 3. [Estructura del Proyecto y Configuración](#3-estructura-del-proyecto-y-configuración)
@@ -728,7 +728,7 @@ export default function GeoCamScreen() {
           style={styles.locationBanner}
         >
           <Text style={styles.bannerText}>
-            ⚠️ Activa la ubicación para etiquetar tus fotos
+            Activa la ubicación para etiquetar tus fotos
           </Text>
         </Pressable>
       )}
@@ -754,13 +754,13 @@ export default function GeoCamScreen() {
               <Image source={{ uri: lastPhoto.uri }} style={styles.thumbnail} />
               <View style={styles.sourceTag}>
                 <Text style={styles.sourceTagText}>
-                  {lastPhoto.source === 'camera' ? '📷' : '🖼️'}
+                  {lastPhoto.source === 'camera' ? 'CAM' : 'GAL'}
                 </Text>
               </View>
             </View>
           ) : (
             <View style={styles.galleryPlaceholder}>
-              <Text style={{ fontSize: 24 }}>🖼️</Text>
+              <Text style={{ fontSize: 24 }}>[+]</Text>
             </View>
           )}
         </Pressable>
@@ -976,7 +976,7 @@ export default function MapaScreen() {
               <View style={styles.unmappedCard}>
                 <Image source={{ uri: item.uri }} style={styles.unmappedThumb} />
                 <Text style={styles.unmappedTag}>
-                  {item.source === 'camera' ? '📷' : '🖼️'}
+                  {item.source === 'camera' ? 'CAM' : 'GAL'}
                 </Text>
               </View>
             )}
@@ -1067,7 +1067,7 @@ Crea en la raíz del repositorio el archivo `AI-LOG.md` con este contenido base:
    - Verifica que surge el diálogo nativo: *¿Borrar todas las fotos?*
    - Al presionar *Borrar todo*, la lista y el mapa quedan limpios.
 6. **Prueba 4 (Galería)**:
-   - Presiona el botón de galería e importa una fotografía. Comprueba que se marca con el icono 🖼️.
+   - Presiona el botón de galería e importa una fotografía. Comprueba que se marca con la etiqueta GAL.
 
 ### 10.2 Checklist Final de Entrega
 - [x] `types/geo.ts` con tipado estricto sin `any`.

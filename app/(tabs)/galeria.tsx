@@ -320,7 +320,7 @@ export default function GaleriaScreen() {
 
           {albumName && (
             <Text style={styles.photoAlbumTag} numberOfLines={1}>
-              📁 {albumName}
+              {albumName}
             </Text>
           )}
 
@@ -400,8 +400,8 @@ export default function GaleriaScreen() {
           showsHorizontalScrollIndicator={false}
           data={[
             { id: 'all', type: 'general', name: 'Todas' },
-            { id: 'cloud_synced', type: 'cloud', cloud: 'synced', name: '☁️ En Nube' },
-            { id: 'cloud_pending', type: 'cloud', cloud: 'pending', name: '⏳ Pendientes' },
+            { id: 'cloud_synced', type: 'cloud', cloud: 'synced', name: 'En Nube' },
+            { id: 'cloud_pending', type: 'cloud', cloud: 'pending', name: 'Pendientes' },
             { id: 'fav', type: 'favorite', name: 'Favoritas' },
             { id: 'no_album', type: 'album', albumId: null, name: 'Sin Álbum' },
             ...albums.map((a) => ({ id: `alb_${a.id}`, type: 'album' as const, albumId: a.id, name: a.name })),

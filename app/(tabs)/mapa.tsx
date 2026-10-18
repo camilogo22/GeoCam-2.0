@@ -156,7 +156,7 @@ export default function MapaScreen() {
                 </Text>
                 {photo.albumId && albumMap.has(photo.albumId) && (
                   <Text style={styles.calloutAlbum} numberOfLines={1}>
-                    📁 {albumMap.get(photo.albumId)}
+                    {albumMap.get(photo.albumId)}
                   </Text>
                 )}
                 <Text style={styles.calloutDate}>
@@ -242,9 +242,11 @@ export default function MapaScreen() {
               >
                 <Image source={{ uri: item.uri }} style={styles.unmappedThumb} />
                 <View style={styles.unmappedBadge}>
-                  <Text style={styles.unmappedBadgeText}>
-                    {item.source === 'camera' ? '📷' : '🖼️'}
-                  </Text>
+                  <Ionicons
+                    name={item.source === 'camera' ? 'camera' : 'images'}
+                    size={11}
+                    color="#ffffff"
+                  />
                 </View>
               </Pressable>
             )}

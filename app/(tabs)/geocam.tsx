@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, Image, StyleSheet, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { CameraView } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { useCamera } from '@/hooks/useCamera';
@@ -139,7 +140,7 @@ export default function GeoCamScreen() {
           style={styles.locationBanner}
         >
           <Text style={styles.bannerText}>
-            ⚠️ Activa la ubicación para etiquetar tus fotos
+            Activa la ubicación para etiquetar tus fotos
           </Text>
         </Pressable>
       )}
@@ -175,14 +176,16 @@ export default function GeoCamScreen() {
             <View>
               <Image source={{ uri: (photos[0] || lastPhoto)!.uri }} style={styles.thumbnail} />
               <View style={styles.sourceTag}>
-                <Text style={styles.sourceTagText}>
-                  {(photos[0] || lastPhoto)!.source === 'camera' ? '📷' : '🖼️'}
-                </Text>
+                <Ionicons
+                  name={(photos[0] || lastPhoto)!.source === 'camera' ? 'camera' : 'images'}
+                  size={11}
+                  color="#ffffff"
+                />
               </View>
             </View>
           ) : (
             <View style={styles.galleryPlaceholder}>
-              <Text style={{ fontSize: 24 }}>🖼️</Text>
+              <Ionicons name="images-outline" size={24} color="#a3a3a3" />
             </View>
           )}
         </Pressable>
