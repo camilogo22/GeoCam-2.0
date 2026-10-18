@@ -1,37 +1,56 @@
-# GeoCam Persistente — Modulo CRUD con Drizzle ORM y SQLite
+# GeoCam-2.0 📸☁️
 
-Aplicacion movil desarrollada con **Expo**, **React Native**, **TypeScript**, **Drizzle ORM** y **Expo SQLite** para el Taller Integrador de la Semana 7.
+Aplicación móvil de **Cámara, Galería Geolocalizada y Almacenamiento en la Nube**, desarrollada con **React Native**, **Expo SDK 52/53**, **TypeScript**, **SQLite**, **Drizzle ORM** y **Supabase** (Storage & Database).
 
-**Desarrollador:** Camilo Gomez  
-**Semana:** 7 — Base de Datos Local Offline-First con Drizzle ORM y SQLite  
-**Repositorio:** [https://github.com/camilogo22/GeoCam](https://github.com/camilogo22/GeoCam)  
-
----
-
-## Caracteristicas Principales
-
-- **Base de Datos Embebida Offline-First**: Implementacion completa con `expo-sqlite` y `drizzle-orm/expo-sqlite`, ejecutando con `PRAGMA foreign_keys = ON;` y `enableChangeListener: true`.
-- **Relaciones y Llaves Foraneas (C1)**: Tabla `albums` relacionada con `photos` mediante la columna `albumId`. Regla `onDelete: 'set null'` para que al borrar un album sus fotos queden sin album pero no se eliminen.
-- **Historial de Migraciones Versionadas (C2)**:
-  - Migracion `0000_sturdy_omega_sentinel.sql`: Tablas iniciales `albums` y `photos`.
-  - Migracion `0001_flippant_retro_girl.sql`: Adicion incremental de columnas `note` (texto) y `favorite` (booleano) preservando los datos existentes.
-- **CRUD Completo de Fotos (C3)**: Pantalla dedicada `app/photo/[id].tsx` para ver metadatos y coordenadas, editar notas, alternar estado favorito, reasignar album y eliminar con confirmacion.
-- **Busqueda y Filtros Reactivos (C4)**: Pantalla `app/(tabs)/galeria.tsx` con buscador en vivo por nota (operador `like`), filtro por favoritas y selector de albumes.
-- **Persistencia Fisica en Documentos (C5)**: Modulo `services/photoFiles.ts` que copia fotos desde la cache temporal a la carpeta de documentos permanentes (`Paths.document`) y elimina el archivo fisico al borrar el registro de SQLite.
-- **Modulos Nativos y Sensores**: Camara nativa (`expo-camera`), mapa interactivo (`react-native-maps`), acelerometro (`expo-sensors`) y geolocalizacion (`expo-location`).
+**Desarrollador:** Camilo Gómez  
+**Versión:** 2.0.0 (Semana 8 — Cloud Sync & Offline-First)  
+**Repositorio GitHub:** [https://github.com/camilogo22/GeoCam-2.0](https://github.com/camilogo22/GeoCam-2.0)
 
 ---
 
-## Capturas de Ejecucion en Dispositivo Fisico
+## 📱 Capturas de Pantalla en Dispositivo Físico (iOS / iPhone)
 
-| Pantalla Principal (Inicio) | Galería y Álbumes | Mapa GPS Interactiva |
+| 🏠 Pantalla de Inicio (Cloud Dashboard) | 🖼️ Galería Sincronizada en la Nube | 🗺️ Mapa GPS Interactivo (Riohacha) |
 | :---: | :---: | :---: |
-| <img src="screenshots/inicio.jpg" width="260" alt="Pantalla Inicio GeoCam" /> | <img src="screenshots/galeria.jpg" width="260" alt="Galería y Álbumes GeoCam" /> | <img src="screenshots/mapa.jpg" width="260" alt="Mapa GPS Riohacha GeoCam" /> |
-| *Estadísticas de fotos, estado SQLite & Drizzle activo y fotos recientes.* | *Buscador por notas, filtro por álbumes ("clase") y fotos guardadas.* | *Detección de ubicación GPS y visualización en mapa (Riohacha, Colombia).* |
+| <img src="screenshots/inicio.jpg" width="270" alt="Pantalla de Inicio GeoCam 2.0" /> | <img src="screenshots/galeria.jpg" width="270" alt="Galería y Álbumes Sincronizados" /> | <img src="screenshots/mapa.jpg" width="270" alt="Mapa GPS Riohacha" /> |
+| *Métricas reactivas: 7/7 fotos en la nube, conteo GPS, álbumes y accesos rápidos.* | *Bordes esmeralda, badges `☁️ En Nube`, filtros dinámicos e importador.* | *Pines geolocalizados de capturas fotográficas en Riohacha, Colombia.* |
 
 ---
 
-## Diagrama de Tablas de la Base de Datos
+## ✨ Características Principales de GeoCam 2.0
+
+### 1. 📷 Cámara Geolocalizada & Sensores Nativos
+* Captura de fotos en tiempo real con `expo-camera`.
+* Detección automática de coordenadas de alta precisión (latitud, longitud y exactitud) mediante `expo-location`.
+* **Degradación elegante**: Si el usuario no otorga permisos de GPS, las fotos se guardan localmente sin bloquear la experiencia de la cámara.
+* **Acelerómetro (`useShake`)**: Agitar el dispositivo permite vaciar la galería con confirmación de seguridad.
+
+### 2. 🗄️ Base de Datos Local Offline-First (SQLite + Drizzle ORM)
+* Almacenamiento local ultrarrápido con `expo-sqlite` y `drizzle-orm/expo-sqlite`.
+* Cumplimiento estricto de integridad referencial con `PRAGMA foreign_keys = ON;`.
+* Consultas reactivas en tiempo real mediante `useLiveQuery` (la UI se actualiza instantáneamente ante cualquier cambio en la base de datos).
+* **Migraciones versionadas con Drizzle Kit**:
+  * `0000_sturdy_omega_sentinel.sql`: Tablas `albums` y `photos`.
+  * `0001_flippant_retro_girl.sql`: Adición de `note` (texto) y `favorite` (booleano).
+  * `0002_great_scarecrow.sql`: Campos de sincronización en la nube (`clientId`, `remotePath`, `syncedAt`, `updatedAt`, `ownerId`).
+
+### 3. ☁️ Backend as a Service con Supabase (Semana 8)
+* **Almacenamiento en Storage**: Bucket público `geocam` para subida, descarga y persistencia de imágenes en la nube.
+* **Base de datos remota PostgreSQL**: Tabla `photos` con metadatos completos sincronizados.
+* **Seguridad RLS (Row Level Security)**: Políticas permisivas configuradas para operaciones anónimas y autenticadas.
+* **Distinción visual de sincronización**:
+  * Las fotos subidas a la nube cuentan con un **borde verde esmeralda brillante (`#10b981`)** y un badge prominente **`☁️ En Nube`**.
+  * Filtros dedicados en galería para alternar entre: `Todas`, `☁️ En Nube`, `⏳ Pendientes`, `Favoritas` y álbumes.
+* **Borrado coherente**: Al eliminar una foto sincronizada, se borra física y lógicamente de SQLite, del sistema de archivos local y del bucket/tabla en Supabase.
+* **Importador desde Galería**: Permite seleccionar fotos existentes del carrete del teléfono (con soporte nativo para URIs `content://`, `ph://` y rutas de caché).
+
+### 4. 🗺️ Mapa Interactivo
+* Visualización de fotos en el mapa nativo con `react-native-maps`.
+* Marcadores personalizados con callouts que permiten abrir el detalle de cada foto directamente desde el mapa.
+
+---
+
+## 🏗️ Arquitectura de la Base de Datos
 
 ```text
 +-----------------------------------+             +-----------------------------------+
@@ -47,123 +66,100 @@ Aplicacion movil desarrollada con **Expo**, **React Native**, **TypeScript**, **
                                                   | album_id: integer (FK, Set Null)  |
                                                   | note: text (Nullable)             |
                                                   | favorite: integer (Boolean, 0)    |
+                                                  | client_id: text (UUID, Nullable)  |
+                                                  | remote_path: text (Nullable)      |
+                                                  | synced_at: integer (Nullable)     |
+                                                  | updated_at: integer (Nullable)    |
+                                                  | owner_id: text (Nullable)         |
                                                   +-----------------------------------+
 ```
 
-### Relacion:
-- Un album puede contener de 0 a muchas fotos (`1` a `0..*`).
-- Una foto pertenece opcionalmente a un album (`album_id` nullable).
-- Regla referencial: `ON DELETE SET NULL`. Al eliminar un registro en `albums`, las fotos asociadas actualizan su campo `album_id` a `NULL` sin borrarse.
-
 ---
 
-## Estructura del Proyecto
+## 📂 Estructura del Código
 
 ```text
 semana-7/
 ├── app/
 │   ├── (tabs)/
-│   │   ├── _layout.tsx           # Pestañas: GeoCam, Galeria y Mapa
-│   │   ├── geocam.tsx            # Pestaña 1: Camara, coordenadas y captura persistente
-│   │   ├── galeria.tsx           # Pestaña 2: Busqueda por nota, filtros por album y favoritas
-│   │   ├── mapa.tsx              # Pestaña 3: Mapa interactivo con marcadores y enlace a detalle
-│   │   └── mapa.web.tsx          # Pestaña 3: Modo adaptado a navegador web
+│   │   ├── _layout.tsx           # Navegación por pestañas: Inicio, GeoCam, Galería y Mapa
+│   │   ├── inicio.tsx            # Dashboard con métricas cloud y sincronización masiva
+│   │   ├── geocam.tsx            # Captura de cámara, GPS en vivo e importación
+│   │   ├── galeria.tsx           # Galería con filtros (Nube, Pendientes, Álbumes, Favoritas)
+│   │   ├── mapa.tsx              # Mapa nativo con marcadores geolocalizados
+│   │   └── mapa.web.tsx          # Mapa adaptado para navegador Web
 │   ├── photo/
-│   │   └── [id].tsx              # Pantalla CRUD: Ver foto, editar nota, favorito, album y borrar
-│   ├── _layout.tsx               # Root Layout con ejecucion de useMigrations()
-│   └── index.tsx                 # Redireccion a /(tabs)/geocam
+│   │   └── [id].tsx              # Detalle de foto: nota, álbum, favoritos y botón Subir a la Nube
+│   ├── _layout.tsx               # Root Layout con migrador useMigrations()
+│   └── index.tsx                 # Redirección automática a /(tabs)/inicio
 ├── db/
-│   ├── client.ts                 # Instancia de Drizzle ORM y activacion de PRAGMA foreign_keys
-│   ├── schema.ts                 # Esquemas relacionales de albums y photos
-│   └── repositories/
-│       ├── photos.ts             # Consultas Drizzle listQuery, withLocationQuery y CRUD
-│       └── albums.ts             # Consultas Drizzle de albumes
-├── drizzle/                      # Carpeta versionada con migraciones SQL oficiales
-│   ├── meta/
-│   │   └── _journal.json         # Registro historico de migraciones
-│   ├── 0000_sturdy_omega_sentinel.sql  # Migracion inicial: albums y photos
-│   ├── 0001_flippant_retro_girl.sql    # Migracion 2: note y favorite
-│   ├── 0002_great_scarecrow.sql        # Migracion 3: sync fields y user isolation (Semana 8)
-│   └── migrations.js             # Indice de migraciones empaquetadas para Expo
+│   ├── client.ts                 # Instancia de Drizzle ORM y SQLite
+│   ├── schema.ts                 # Esquemas relacionales con llaves foráneas y tipos
+│   └── repositories/             # Capa de acceso a datos Drizzle
+├── drizzle/                      # Migraciones versionadas en archivos SQL
 ├── lib/
-│   ├── secureStorage.ts          # Adaptador seguro en chunks para Supabase Auth (Expo SecureStore)
-│   └── supabase.ts               # Cliente Supabase singleton con auto-refresh y AppState
+│   ├── secureStorage.ts          # Almacenamiento seguro nativo con Expo SecureStore
+│   └── supabase.ts               # Cliente Supabase singleton con auto-refresh
 ├── services/
-│   ├── cloudPhotos.ts            # Sincronizacion con Supabase Storage privado y Postgres RLS
-│   ├── photoFiles.ts             # Persistencia permanente en Paths.document y borrado fisico
-│   └── photosRepository.ts       # Integracion de repositorios Drizzle, FileSystem y Cloud
-├── hooks/
-│   ├── usePhotos.ts              # Hook reactivo de fotos filtradas por ownerId con useLiveQuery
-│   ├── useAlbums.ts              # Hook reactivo de albumes con useLiveQuery
-│   ├── useCamera.ts              # Hook nativo de camara
-│   ├── useGeoLocation.ts         # Hook nativo de GPS
-│   └── useShake.ts               # Hook con acelerometro
-├── context/
-│   ├── AuthContext.tsx           # Proveedor de autenticacion Supabase (signIn, signUp, signOut)
-│   └── GeoPhotosContext.tsx      # Proveedor global conectado a SQLite y sesion de usuario
-├── supabase/
-│   └── schema.sql                # Esquema PostgreSQL con RLS y politicas para bucket geocam
-├── types/
-│   └── geo.ts                    # Modelos de datos TypeScript (GeoPhoto, Coords, AlbumItem)
-├── screenshots/                  # Capturas de ejecucion en dispositivo fisico (iPhone)
+│   ├── cloudPhotos.ts            # Sincronización con Supabase Storage y base de datos remota
+│   ├── photoFiles.ts             # Persistencia permanente en FileSystem y borrado físico
+│   └── photosRepository.ts       # Orquestador entre SQLite, FileSystem y Cloud
+├── hooks/                        # Custom hooks: usePhotos, useAlbums, useCamera, useGeoLocation, useShake
+├── screenshots/                  # Capturas reales de la aplicación en iPhone
 │   ├── inicio.jpg
 │   ├── galeria.jpg
 │   └── mapa.jpg
-├── drizzle.config.ts             # Configuracion de Drizzle Kit para Expo SQLite
-├── metro.config.js               # Resolucion de archivos .sql para migraciones
-├── babel.config.js               # Plugin inline-import para SQL
-├── AI-LOG.md                     # Auditoria de IA de la Semana 7 y Semana 8
-└── README.md                     # Documentacion general del repositorio
+├── supabase/
+│   └── schema.sql                # Script SQL idempotente para tablas, RLS y bucket en Supabase
+├── drizzle.config.ts             # Configuración de Drizzle Kit
+└── README.md                     # Documentación oficial del proyecto
 ```
 
 ---
 
-## Semana 8 — Backend as a Service con Supabase
+## 🚀 Instalación y Puesta en Marcha
 
-### Novedades Integradas
-1. **Acceso Inmediato sin Barrera de Login**:
-   - Apertura directa a las pestañas principales (`(tabs)/inicio`, cámara, galería y mapa) sin pantalla de bloqueo de inicio de sesión.
-   - Acceso completo a todas las fotos locales y sincronización libre hacia Supabase.
-2. **Esquema SQLite Extendido con Drizzle (T4)**:
-   - Migración `0002_great_scarecrow.sql` agregando `clientId`, `updatedAt`, `remotePath`, `syncedAt` y `ownerId`.
-   - Compatibilidad total para registrar metadatos de sincronización preservando fotos previas.
-3. **Storage y Políticas de Nube (T5 / C2 / C3)**:
-   - Bucket `geocam` en Supabase con políticas RLS para lectura, subida y borrado.
-   - Prevención de huérfanos y duplicados con rollback ante fallos en `services/cloudPhotos.ts`.
-   - Borrado coherente (C3): al eliminar una foto en SQLite, se elimina automáticamente su registro remoto y el archivo en Supabase Storage.
-4. **Sincronización Individual y Masiva (T5 / C1)**:
-   - Detalle de Foto (`app/photo/[id].tsx`): Tarjeta de estado de sincronización y botón *"Subir a la nube"*.
-   - Pantalla de Inicio (`app/(tabs)/inicio.tsx`): Contador reactivo de fotos en nube y banner de sincronización masiva pendiente.
+### Prerrequisitos
+* **Node.js**: v18 o superior
+* **Expo Go** o simulador iOS/Android
+* Proyecto activo en [Supabase](https://supabase.com)
 
-### Configuración de Supabase
-1. Copiar `.env.example` a `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-2. Completar las variables de entorno con las credenciales de tu proyecto Supabase:
-   ```env
-   EXPO_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
-   EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=tu-anon-key-aqui
-   ```
-3. Ejecutar el script SQL en el **SQL Editor** de tu proyecto Supabase:
-   - Ubicación: `supabase/schema.sql` (crea la tabla `photos`, activa RLS, crea el bucket privado `geocam` y configura las políticas de Storage para usuarios autenticados).
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/camilogo22/GeoCam-2.0.git
+cd GeoCam-2.0
+```
 
----
+### 2. Instalar dependencias
+```bash
+npm install
+```
 
-## Proyecto Independiente: Muro de Clase
+### 3. Configurar variables de entorno
+Crea tu archivo `.env` en la raíz del proyecto:
+```env
+EXPO_PUBLIC_SUPABASE_URL=https://xrsajlzauklhnyekuuks.supabase.co
+EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=tu_clave_anon_public_aqui
+```
 
-El proyecto de aula **Muro de Clase** (Semana 8) se encuentra alojado y organizado de manera independiente en:
-`../semana-8/muro-de-clase`
-Cuenta con su propia configuración de Expo, `package.json`, esquema SQL de Supabase (`muro_posts` y bucket público `muro_fotos`), suscripciones Realtime y autenticación Supabase completa.
+### 4. Configurar Base de Datos en Supabase
+Ejecuta el script [`supabase/schema.sql`](./supabase/schema.sql) en el **SQL Editor** de tu panel de Supabase para crear la tabla `photos`, el bucket `geocam` y sus políticas RLS.
+
+### 5. Iniciar la aplicación
+```bash
+npx expo start -c
+```
+Escanea el código QR desde la app **Expo Go** en tu dispositivo físico o presiona `i` para simulador de iOS o `a` para emulador de Android.
 
 ---
 
-## Verificacion de Criterios de Entrega
+## 🛠️ Tecnologías Utilizadas
 
-- [x] **Migraciones versionadas**: Se generaron tres migraciones (`0000`, `0001` y `0002`) con `drizzle-kit generate` sin edicion manual.
-- [x] **Preservacion de datos locales**: Columnas agregadas con `ALTER TABLE ADD COLUMN` preservando las fotos locales previas.
-- [x] **Autenticacion Supabase**: Login/Registro con `expo-secure-store` y control de sesiones con auto-refresh.
-- [x] **Almacenamiento Privado Seguro**: Bucket `geocam` con RLS restringido a la carpeta de cada usuario.
-- [x] **Borrado coherente (C3)**: Eliminación simultánea en SQLite, tabla Postgres y Supabase Storage.
-- [x] **Compilacion TypeScript**: 0 errores de compilacion con `npx tsc --noEmit`.
-- [x] **Export Metro Bundler**: Compilación exitosa para producción (1489 módulos empaquetados).
+* **Framework:** [Expo](https://expo.dev/) (SDK 52/53) + [React Native](https://reactnative.dev/)
+* **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
+* **ORM Local:** [Drizzle ORM](https://orm.drizzle.team/)
+* **Base de Datos Local:** [Expo SQLite](https://docs.expo.dev/versions/latest/sdk/sqlite/)
+* **BaaS / Cloud:** [Supabase](https://supabase.com/) (PostgreSQL + Supabase Storage + Realtime)
+* **Cámara & Sensores:** `expo-camera`, `expo-location`, `expo-sensors`, `expo-image-picker`
+* **Mapas:** `react-native-maps`
+* **Estilos & UI:** React Native StyleSheet con paleta de alto contraste en modo oscuro
